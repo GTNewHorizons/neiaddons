@@ -19,6 +19,26 @@
   ]
 },
 {
+  "modid": "${modId}|Botany",
+  "name": "${modName}: Botany",
+  "description": "",
+  "version": "${modVersion}",
+  "mcversion": "${minecraftVersion}",
+  "url": "http://bdew.net/neiaddons/",
+  "updateUrl": "",
+  "authorList": [
+    "bdew"
+  ],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"NEIAddons",
+  "dependencies": [
+  	"NEIAddons"
+  ]
+},
+{
   "modid": "${modId}|Forestry",
   "name": "${modName}: Forestry",
   "description": "",
@@ -59,8 +79,28 @@
   ]
 },
 {
-  "modid": "${modId}|AE",
-  "name": "${modName}: Applied Energistics",
+  "modid": "${modId}|Developer",
+  "name": "${modName}: Developer Tools",
+  "description": "",
+  "version": "${modVersion}",
+  "mcversion": "${minecraftVersion}",
+  "url": "http://bdew.net/neiaddons/",
+  "updateUrl": "",
+  "authorList": [
+    "bdew"
+  ],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"NEIAddons",
+  "dependencies": [
+  	"NEIAddons"
+  ]
+},
+{
+  "modid": "${modId}|AppEng",
+  "name": "${modName}: Applied Energistics 2",
   "description": "",
   "version": "${modVersion}",
   "mcversion": "${minecraftVersion}",
