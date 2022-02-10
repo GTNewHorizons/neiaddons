@@ -19,11 +19,11 @@ class MutationDumper(root: ISpeciesRoot, suffix: String) extends ArrayDumper[IMu
 
   import scala.collection.JavaConversions._
 
-  override def header() = Array("UID", "Name", "Allele0", "Allele1", "isSecret", "baseChance", "conditions")
+  override def header(): Array[String] = Array("UID", "Name", "Allele0", "Allele1", "isSecret", "baseChance", "conditions")
 
   override def array(): Array[IMutation] = root.getMutations(false).toArray(Array.empty)
 
-  override def dump(mutation: IMutation, id: Int) = {
+  override def dump(mutation: IMutation, id: Int): Array[String] = {
     val speciesKey = root.getKaryotypeKey.ordinal()
     val conditions = try {
       Option(mutation.getSpecialConditions) map (x => x.mkString("|")) getOrElse ""
