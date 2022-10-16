@@ -21,7 +21,11 @@ import net.bdew.neiaddons.NEIAddons;
 import net.bdew.neiaddons.botany.flowers.FlowerHelper;
 import net.minecraft.client.resources.I18n;
 
-@Mod(modid = NEIAddons.modId + "|Botany", name = NEIAddons.modName + ": Botany", version = NEIAddons.modVersion, dependencies = "after:NEIAddons;after:Botany")
+@Mod(
+        modid = NEIAddons.modId + "|Botany",
+        name = NEIAddons.modName + ": Botany",
+        version = NEIAddons.modVersion,
+        dependencies = "after:NEIAddons;after:Botany")
 public class AddonBotany extends BaseAddon {
     public static boolean showFlowerMutations;
     public static boolean loadBlacklisted;
@@ -41,7 +45,7 @@ public class AddonBotany extends BaseAddon {
 
     @Override
     public String[] getDependencies() {
-        return new String[]{"Botany"};
+        return new String[] {"Botany"};
     }
 
     @Override
@@ -52,15 +56,27 @@ public class AddonBotany extends BaseAddon {
 
     @Override
     public void init(Side side) throws Exception {
-        showFlowerMutations = NEIAddons.config.get(getName(), "Show Flower Mutations", true, "Set to false to disable flower mutations browsing").getBoolean(false);
+        showFlowerMutations = NEIAddons.config
+                .get(getName(), "Show Flower Mutations", true, "Set to false to disable flower mutations browsing")
+                .getBoolean(false);
 
-        loadBlacklisted = NEIAddons.config.get(getName(), "Load blacklisted", false, "Set to true to load blacklisted species and alleles, it's dangerous and (mostly) useless").getBoolean(false);
+        loadBlacklisted = NEIAddons.config
+                .get(
+                        getName(),
+                        "Load blacklisted",
+                        false,
+                        "Set to true to load blacklisted species and alleles, it's dangerous and (mostly) useless")
+                .getBoolean(false);
 
         active = true;
     }
 
     public void registerWithNEIPlugins(String name, String id) {
-        FMLInterModComms.sendRuntimeMessage(this, "NEIPlugins", "register-crafting-handler", String.format("%s@%s@%s", I18n.format("bdew.neiaddons.genetics"), name, id));
+        FMLInterModComms.sendRuntimeMessage(
+                this,
+                "NEIPlugins",
+                "register-crafting-handler",
+                String.format("%s@%s@%s", I18n.format("bdew.neiaddons.genetics"), name, id));
     }
 
     @Override

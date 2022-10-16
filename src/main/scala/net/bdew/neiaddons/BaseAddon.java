@@ -15,11 +15,10 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.versioning.ArtifactVersion;
 import cpw.mods.fml.common.versioning.VersionParser;
 import cpw.mods.fml.relauncher.Side;
+import java.util.Map;
 import net.bdew.neiaddons.api.NEIAddon;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Map;
 
 public abstract class BaseAddon implements NEIAddon {
 
@@ -98,12 +97,16 @@ public abstract class BaseAddon implements NEIAddon {
         ArtifactVersion found = modlist.get(modid).getProcessedVersion();
 
         if (found == null) {
-            logInfo("Unable to determine version of required mod %s, dependent features will be unavailable", req.getLabel());
+            logInfo(
+                    "Unable to determine version of required mod %s, dependent features will be unavailable",
+                    req.getLabel());
             return false;
         }
 
         if (!req.containsVersion(found)) {
-            logInfo("Version mismatch: %s is required while %s was detected, dependent features will be unavailable", req.toString(), found.getVersionString());
+            logInfo(
+                    "Version mismatch: %s is required while %s was detected, dependent features will be unavailable",
+                    req.toString(), found.getVersionString());
             return false;
         }
 

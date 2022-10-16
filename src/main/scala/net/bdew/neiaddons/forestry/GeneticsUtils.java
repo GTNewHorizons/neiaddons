@@ -18,18 +18,20 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.genetics.*;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import net.bdew.neiaddons.Utils;
-import net.minecraft.item.ItemStack;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import net.bdew.neiaddons.Utils;
+import net.minecraft.item.ItemStack;
 
 public class GeneticsUtils {
     public enum RecipePosition {
-        Parent1, Parent2, Offspring, Producer
+        Parent1,
+        Parent2,
+        Offspring,
+        Producer
     }
 
     public static Map<RecipePosition, Integer> beePositionToType;
@@ -91,9 +93,12 @@ public class GeneticsUtils {
     @SuppressWarnings("unchecked")
     public static <T> Collection<T> getAllTypedSpecies(Class<? extends T> type, boolean includeBlacklisted) {
         ArrayList<T> list = new ArrayList<T>();
-        for (Entry<String, IAllele> entry : AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
+        for (Entry<String, IAllele> entry :
+                AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
             if (type.isInstance(entry.getValue())) {
-                if (includeBlacklisted || !AlleleManager.alleleRegistry.isBlacklisted(entry.getValue().getUID())) {
+                if (includeBlacklisted
+                        || !AlleleManager.alleleRegistry.isBlacklisted(
+                                entry.getValue().getUID())) {
                     list.add((T) entry.getValue());
                 }
             }
@@ -101,7 +106,7 @@ public class GeneticsUtils {
         return list;
     }
 
-    static public Map<ItemStack, Float> getProduceFromSpecies(IAlleleSpecies species) {
+    public static Map<ItemStack, Float> getProduceFromSpecies(IAlleleSpecies species) {
         if (species instanceof IAlleleBeeSpecies) {
             return Utils.sanitizeDrops(((IAlleleBeeSpecies) species).getProductChances(), species.getUID() + " drops");
         } else if (species instanceof IAlleleTreeSpecies) {
@@ -125,9 +130,10 @@ public class GeneticsUtils {
         return new HashMap<ItemStack, Float>();
     }
 
-    static public Map<ItemStack, Float> getSpecialtyFromSpecies(IAlleleSpecies species) {
+    public static Map<ItemStack, Float> getSpecialtyFromSpecies(IAlleleSpecies species) {
         if (species instanceof IAlleleBeeSpecies) {
-            return Utils.sanitizeDrops(((IAlleleBeeSpecies) species).getSpecialtyChances(), species.getUID() + " specialty");
+            return Utils.sanitizeDrops(
+                    ((IAlleleBeeSpecies) species).getSpecialtyChances(), species.getUID() + " specialty");
         } else if (species instanceof IAlleleTreeSpecies) {
             Map<ItemStack, Float> result = new HashMap<ItemStack, Float>();
             ITreeRoot root = (ITreeRoot) species.getRoot();

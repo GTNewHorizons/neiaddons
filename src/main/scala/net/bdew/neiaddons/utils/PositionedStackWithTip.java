@@ -10,7 +10,6 @@
 package net.bdew.neiaddons.utils;
 
 import codechicken.nei.PositionedStack;
-
 import java.util.List;
 
 public class PositionedStackWithTip extends PositionedStack {

@@ -15,17 +15,16 @@ import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import net.bdew.neiaddons.Utils;
 import net.bdew.neiaddons.forestry.AddonForestry;
 import net.bdew.neiaddons.forestry.GeneticsUtils;
 import net.bdew.neiaddons.forestry.MutationDumper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TreeHelper {
     public static Collection<IAlleleTreeSpecies> allSpecies;
@@ -54,14 +53,16 @@ public class TreeHelper {
             TreeBreedingHandler breedingRecipeHandler = new TreeBreedingHandler();
             API.registerRecipeHandler(breedingRecipeHandler);
             API.registerUsageHandler(breedingRecipeHandler);
-            AddonForestry.instance.registerWithNEIPlugins(breedingRecipeHandler.getRecipeName(), breedingRecipeHandler.getRecipeIdent());
+            AddonForestry.instance.registerWithNEIPlugins(
+                    breedingRecipeHandler.getRecipeName(), breedingRecipeHandler.getRecipeIdent());
         }
 
         if (AddonForestry.showTreeProducts) {
             TreeProduceHandler produceRecipeHandler = new TreeProduceHandler();
             API.registerRecipeHandler(produceRecipeHandler);
             API.registerUsageHandler(produceRecipeHandler);
-            AddonForestry.instance.registerWithNEIPlugins(produceRecipeHandler.getRecipeName(), produceRecipeHandler.getRecipeIdent());
+            AddonForestry.instance.registerWithNEIPlugins(
+                    produceRecipeHandler.getRecipeName(), produceRecipeHandler.getRecipeIdent());
         }
 
         for (IAlleleTreeSpecies species : allSpecies) {

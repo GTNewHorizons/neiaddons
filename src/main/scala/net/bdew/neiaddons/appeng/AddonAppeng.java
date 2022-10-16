@@ -15,6 +15,7 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.lang.reflect.Method;
 import net.bdew.neiaddons.BaseAddon;
 import net.bdew.neiaddons.NEIAddons;
 import net.bdew.neiaddons.Utils;
@@ -23,9 +24,11 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 
-import java.lang.reflect.Method;
-
-@Mod(modid = NEIAddons.modId + "|AppEng", name = NEIAddons.modName + ": Applied Energistics 2", version = NEIAddons.modVersion, dependencies = "after:NEIAddons;after:appliedenergistics2")
+@Mod(
+        modid = NEIAddons.modId + "|AppEng",
+        name = NEIAddons.modName + ": Applied Energistics 2",
+        version = NEIAddons.modVersion,
+        dependencies = "after:NEIAddons;after:appliedenergistics2")
 public class AddonAppeng extends BaseAddon {
 
     @Instance(NEIAddons.modId + "|AppEng")
@@ -45,7 +48,7 @@ public class AddonAppeng extends BaseAddon {
 
     @Override
     public String[] getDependencies() {
-        return new String[]{"appliedenergistics2"};
+        return new String[] {"appliedenergistics2"};
     }
 
     @Override

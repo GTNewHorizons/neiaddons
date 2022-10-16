@@ -18,7 +18,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.bdew.neiaddons.BaseAddon;
 import net.bdew.neiaddons.NEIAddons;
 
-@Mod(modid = NEIAddons.modId + "|Developer", name = NEIAddons.modName + ": Developer Tools", version = NEIAddons.modVersion, dependencies = "after:NEIAddons")
+@Mod(
+        modid = NEIAddons.modId + "|Developer",
+        name = NEIAddons.modName + ": Developer Tools",
+        version = NEIAddons.modVersion,
+        dependencies = "after:NEIAddons")
 public class AddonDeveloper extends BaseAddon {
 
     @Instance(NEIAddons.modId + "|Developer")

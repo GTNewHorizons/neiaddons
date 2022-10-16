@@ -15,6 +15,8 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
+import java.util.ArrayList;
+import java.util.List;
 import net.bdew.neiaddons.api.NEIAddon;
 import net.bdew.neiaddons.network.ClientHandler;
 import net.bdew.neiaddons.network.NetChannel;
@@ -23,10 +25,11 @@ import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Mod(modid = NEIAddons.modId, name = NEIAddons.modName, version = NEIAddons.modVersion, dependencies = "after:NotEnoughItems")
+@Mod(
+        modid = NEIAddons.modId,
+        name = NEIAddons.modName,
+        version = NEIAddons.modVersion,
+        dependencies = "after:NotEnoughItems")
 public class NEIAddons {
 
     public static final String modVersion = "GRADLETOKEN_VERSION";
@@ -85,7 +88,8 @@ public class NEIAddons {
     public void init(FMLInitializationEvent event) {
         logInfo("Loading NEI Addons");
         for (NEIAddon addon : addons) {
-            if (config.get("Addons", addon.getName(), addon.isEnabledByDefault()).getBoolean(false)) {
+            if (config.get("Addons", addon.getName(), addon.isEnabledByDefault())
+                    .getBoolean(false)) {
                 logInfo("Loading %s Addon...", addon.getName());
                 try {
                     addon.init(event.getSide());

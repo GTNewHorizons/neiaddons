@@ -11,11 +11,10 @@ package net.bdew.neiaddons.forestry.trees;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.IAlleleSpecies;
-import net.bdew.neiaddons.forestry.BaseProduceRecipeHandler;
-import net.minecraft.item.Item;
-
 import java.util.Collection;
 import java.util.Map;
+import net.bdew.neiaddons.forestry.BaseProduceRecipeHandler;
+import net.minecraft.item.Item;
 
 public class TreeProduceHandler extends BaseProduceRecipeHandler {
 

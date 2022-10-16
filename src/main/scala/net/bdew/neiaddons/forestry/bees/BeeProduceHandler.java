@@ -11,11 +11,10 @@ package net.bdew.neiaddons.forestry.bees;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.genetics.IAlleleSpecies;
-import net.bdew.neiaddons.forestry.BaseProduceRecipeHandler;
-import net.minecraft.item.Item;
-
 import java.util.Collection;
 import java.util.Map;
+import net.bdew.neiaddons.forestry.BaseProduceRecipeHandler;
+import net.minecraft.item.Item;
 
 public class BeeProduceHandler extends BaseProduceRecipeHandler {
 

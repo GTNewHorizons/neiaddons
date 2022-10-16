@@ -9,6 +9,7 @@
 
 package net.bdew.neiaddons.utils;
 
+import java.util.HashMap;
 import net.bdew.neiaddons.api.SubPacketHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
@@ -16,8 +17,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-
-import java.util.HashMap;
 
 public class SetRecipeCommandHandler implements SubPacketHandler {
     private Class<? extends Container> ContainerClass;

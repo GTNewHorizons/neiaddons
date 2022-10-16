@@ -24,8 +24,7 @@ public class TypedField<T> {
     public T get(Object obj) {
         try {
             Object res = field.get(obj);
-            if (cls.isInstance(res))
-                return (T) res;
+            if (cls.isInstance(res)) return (T) res;
             else
                 throw new RuntimeException(String.format("Wrong field type. Expected %s, got %s", cls, res.getClass()));
         } catch (IllegalAccessException e) {

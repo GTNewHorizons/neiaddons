@@ -10,11 +10,10 @@
 package net.bdew.neiaddons.utils;
 
 import codechicken.nei.PositionedStack;
-import net.bdew.neiaddons.Utils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import net.bdew.neiaddons.Utils;
 
 public class LabeledPositionedStack extends PositionedStack {
 
@@ -46,7 +45,7 @@ public class LabeledPositionedStack extends PositionedStack {
         }
     }
 
-    public List<String> getTooltip(){
+    public List<String> getTooltip() {
         return tooltip;
     }
 }

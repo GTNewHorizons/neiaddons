@@ -15,6 +15,8 @@ import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import java.util.HashMap;
+import java.util.Map;
 import net.bdew.neiaddons.NEIAddons;
 import net.bdew.neiaddons.api.SubPacketHandler;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,9 +24,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ServerHandler extends SimpleChannelInboundHandler<NBTTagCompound> {
     private static Map<String, SubPacketHandler> handlers = new HashMap<String, SubPacketHandler>();
@@ -35,7 +34,9 @@ public class ServerHandler extends SimpleChannelInboundHandler<NBTTagCompound> {
 
     public static void registerHandler(String command, SubPacketHandler handler) {
         if (handlers.containsKey(command)) {
-            throw new RuntimeException(String.format("Tried to register handler for command %s that's already registered for %s", command, handler.toString()));
+            throw new RuntimeException(String.format(
+                    "Tried to register handler for command %s that's already registered for %s",
+                    command, handler.toString()));
         }
         handlers.put(command, handler);
     }
@@ -44,13 +45,16 @@ public class ServerHandler extends SimpleChannelInboundHandler<NBTTagCompound> {
     protected void channelRead0(ChannelHandlerContext ctx, NBTTagCompound msg) throws Exception {
         String cmd = msg.getString("cmd");
         NBTTagCompound data = msg.getCompoundTag("data");
-        NetHandlerPlayServer nh = (NetHandlerPlayServer) (ctx.channel().attr(NetworkRegistry.NET_HANDLER).get());
+        NetHandlerPlayServer nh = (NetHandlerPlayServer)
+                (ctx.channel().attr(NetworkRegistry.NET_HANDLER).get());
         processCommand(cmd, data, nh.playerEntity);
     }
 
     public void processCommand(String cmd, NBTTagCompound data, EntityPlayerMP from) {
         if (handlers.containsKey(cmd)) {
-            NEIAddons.logInfo("Handling %s from %s -> %s", cmd, from.getDisplayName(), handlers.get(cmd).toString());
+            NEIAddons.logInfo(
+                    "Handling %s from %s -> %s",
+                    cmd, from.getDisplayName(), handlers.get(cmd).toString());
             try {
                 handlers.get(cmd).handle(data, from);
             } catch (Throwable e) {

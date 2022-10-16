@@ -9,6 +9,8 @@
 
 package net.bdew.neiaddons.exnihilo.waila;
 
+import java.text.DecimalFormat;
+import java.util.List;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
@@ -22,14 +24,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
-import java.text.DecimalFormat;
-import java.util.List;
-
 public class BarrelHandler implements IWailaDataProvider {
     private DecimalFormat decFormat = new DecimalFormat("0.0");
 
     @Override
-    public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z) {
+    public NBTTagCompound getNBTData(
+            EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z) {
         return tag;
     }
 
@@ -39,27 +39,35 @@ public class BarrelHandler implements IWailaDataProvider {
     }
 
     @Override
-    public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+    public List<String> getWailaHead(
+            ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return currenttip;
     }
 
     @Override
-    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+    public List<String> getWailaBody(
+            ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         NBTTagCompound tag = accessor.getNBTData();
 
         float volume = tag.getFloat("volume");
         int timer = tag.getInteger("timer");
         Fluid fluid = FluidRegistry.getFluid(tag.getShort("fluid"));
 
-        if (fluid != null && fluid.getID() == FluidRegistry.LAVA.getID() && volume > 0 && (accessor.getBlock().getMaterial().getCanBurn())) {
-            currenttip.add(EnumChatFormatting.RED + I18n.format("bdew.exnihilo.barrel.burn", decFormat.format((400F - timer) / 20)) + EnumChatFormatting.RESET);
+        if (fluid != null
+                && fluid.getID() == FluidRegistry.LAVA.getID()
+                && volume > 0
+                && (accessor.getBlock().getMaterial().getCanBurn())) {
+            currenttip.add(EnumChatFormatting.RED
+                    + I18n.format("bdew.exnihilo.barrel.burn", decFormat.format((400F - timer) / 20))
+                    + EnumChatFormatting.RESET);
         }
 
         return currenttip;
     }
 
     @Override
-    public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+    public List<String> getWailaTail(
+            ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return currenttip;
     }
 }

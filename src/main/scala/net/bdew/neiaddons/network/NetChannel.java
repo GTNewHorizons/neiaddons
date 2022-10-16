@@ -14,10 +14,9 @@ import cpw.mods.fml.common.network.FMLOutboundHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import io.netty.channel.ChannelHandler;
+import java.util.EnumMap;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-
-import java.util.EnumMap;
 
 public class NetChannel {
     public EnumMap<Side, FMLEmbeddedChannel> channels;

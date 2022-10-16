@@ -10,18 +10,18 @@
 package net.bdew.neiaddons;
 
 import codechicken.nei.api.API;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.item.ItemStack;
-
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.item.ItemStack;
 
 public class Utils {
     @SuppressWarnings("unchecked")
-    public static <T> Class<? extends T> getAndCheckClass(String cls, Class<? extends T> sup) throws ClassNotFoundException {
+    public static <T> Class<? extends T> getAndCheckClass(String cls, Class<? extends T> sup)
+            throws ClassNotFoundException {
         Class<?> c = Class.forName(cls);
         if (c != null) {
             if (sup.isAssignableFrom(c)) {
@@ -35,7 +35,8 @@ public class Utils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T getAndCheckStaicField(String cls, String field, Class<T> sup) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+    public static <T> T getAndCheckStaicField(String cls, String field, Class<T> sup)
+            throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
         Class<?> c = Class.forName(cls);
         if (c == null) throw new RuntimeException("Can't get " + cls);
 
@@ -47,7 +48,8 @@ public class Utils {
         if (sup.isInstance(v)) {
             return (T) v;
         } else {
-            throw new RuntimeException(String.format("%s.%s is of wrong type, expected: %s, got: %s", cls, field, sup, v.getClass()));
+            throw new RuntimeException(
+                    String.format("%s.%s is of wrong type, expected: %s, got: %s", cls, field, sup, v.getClass()));
         }
     }
 
@@ -57,8 +59,7 @@ public class Utils {
     }
 
     public static void safeAddNBTItem(ItemStack item) {
-        if (item == null)
-            return;
+        if (item == null) return;
         API.addItemListEntry(item);
     }
 
@@ -66,16 +67,11 @@ public class Utils {
      * Like ItemStack.isItemStackEqual but ignores stack size
      */
     public static boolean isSameItem(ItemStack s1, ItemStack s2) {
-        if ((s1 == null) || (s2 == null))
-            return false;
-        if (s1.getItem() != s2.getItem())
-            return false;
-        if (s1.getItemDamage() != s2.getItemDamage())
-            return false;
-        if ((s1.getTagCompound() == null) && (s2.getTagCompound() == null))
-            return true;
-        if ((s1.getTagCompound() == null) || (s2.getTagCompound() == null))
-            return false;
+        if ((s1 == null) || (s2 == null)) return false;
+        if (s1.getItem() != s2.getItem()) return false;
+        if (s1.getItemDamage() != s2.getItemDamage()) return false;
+        if ((s1.getTagCompound() == null) && (s2.getTagCompound() == null)) return true;
+        if ((s1.getTagCompound() == null) || (s2.getTagCompound() == null)) return false;
         return s1.getTagCompound().equals(s2.getTagCompound());
     }
 
@@ -88,7 +84,8 @@ public class Utils {
                 continue;
             }
             for (Entry<ItemStack, Float> mergedStack : merged.entrySet()) {
-                if (isSameItem(stack.getKey(), mergedStack.getKey()) && (stack.getValue().equals(mergedStack.getValue()))) {
+                if (isSameItem(stack.getKey(), mergedStack.getKey())
+                        && (stack.getValue().equals(mergedStack.getValue()))) {
                     mergedStack.getKey().stackSize += 1;
                     continue outer;
                 }

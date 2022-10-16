@@ -18,13 +18,12 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
-import net.bdew.neiaddons.NEIAddons;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.List;
+import net.bdew.neiaddons.NEIAddons;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
 
 @ChannelHandler.Sharable
 public class NBTMessageCodec extends MessageToMessageCodec<FMLProxyPacket, NBTTagCompound> {
@@ -33,7 +32,8 @@ public class NBTMessageCodec extends MessageToMessageCodec<FMLProxyPacket, NBTTa
         ByteBuf buff = Unpooled.buffer();
         DataOutputStream writer = new DataOutputStream(new ByteBufOutputStream(buff));
         CompressedStreamTools.write(msg, writer);
-        out.add(new FMLProxyPacket(buff, ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get()));
+        out.add(new FMLProxyPacket(
+                buff, ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get()));
         writer.close();
     }
 

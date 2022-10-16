@@ -17,17 +17,17 @@ import net.bdew.neiaddons.exnihilo.waila.CrucibleHandler;
 import net.minecraft.tileentity.TileEntity;
 
 public class WailaHandler {
-    static public Class<? extends TileEntity> clsTeBarrel;
-    static public Class<? extends TileEntity> clsTeCrucible;
-    static public Class<? extends TileEntity> clsTeBeeTrap;
+    public static Class<? extends TileEntity> clsTeBarrel;
+    public static Class<? extends TileEntity> clsTeCrucible;
+    public static Class<? extends TileEntity> clsTeBeeTrap;
 
-    static private void loadClasses() throws ClassNotFoundException {
+    private static void loadClasses() throws ClassNotFoundException {
         clsTeBarrel = Utils.getAndCheckClass("exnihilo.blocks.tileentities.TileEntityBarrel", TileEntity.class);
         clsTeCrucible = Utils.getAndCheckClass("exnihilo.blocks.tileentities.TileEntityCrucible", TileEntity.class);
         clsTeBeeTrap = Utils.getAndCheckClass("exnihilo.blocks.tileentities.TileEntityBeeTrap", TileEntity.class);
     }
 
-    static public void loadCallback(IWailaRegistrar reg) {
+    public static void loadCallback(IWailaRegistrar reg) {
         try {
             loadClasses();
             reg.registerBodyProvider(new CrucibleHandler(), clsTeCrucible);

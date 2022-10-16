@@ -14,16 +14,18 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.Collection;
 import net.bdew.neiaddons.BaseAddon;
 import net.bdew.neiaddons.NEIAddons;
 import net.bdew.neiaddons.Utils;
-import net.bdew.neiaddons.api.NEIAddon;
 import net.minecraft.client.gui.inventory.GuiContainer;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-@Mod(modid = NEIAddons.modId + "|CraftingTables", name = NEIAddons.modName + ": Crafting Tables", version = NEIAddons.modVersion, dependencies = "after:NEIAddons")
+@Mod(
+        modid = NEIAddons.modId + "|CraftingTables",
+        name = NEIAddons.modName + ": Crafting Tables",
+        version = NEIAddons.modVersion,
+        dependencies = "after:NEIAddons")
 public class AddonCraftingTables extends BaseAddon {
 
     public static Collection<Class<? extends GuiContainer>> craftingTables;
@@ -62,12 +64,12 @@ public class AddonCraftingTables extends BaseAddon {
 
         tryLoadTableClass("EE3", "com.pahimar.ee3.client.gui.inventory.GuiPortableCrafting", "EE3 Minium Stone");
         tryLoadTableClass("BuildCraft|Factory", "buildcraft.factory.gui.GuiAutoCrafting", "BC Autorcrafting Table");
-        tryLoadTableClass("powersuitaddons", "com.qmxtech.powersuitaddons.client.PortableCraftingGui", "MPSA In-Place Assembler");
+        tryLoadTableClass(
+                "powersuitaddons", "com.qmxtech.powersuitaddons.client.PortableCraftingGui", "MPSA In-Place Assembler");
         tryLoadTableClass("ProjectE", "moze_intel.projecte.gameObjs.gui.GUIPhilosStone", "ProjectE Philosopher Stone");
         tryLoadTableClass("BiblioCraft", "jds.bibliocraft.gui.GuiFancyWorkbench", "BiblioCraft Fancy Workbench");
         tryLoadTableClass("RIO", "remoteio.client.gui.GuiIntelligentWorkbench", "RemoteIO Intelligent Workbench");
         tryLoadTableClass("Railcraft", "mods.railcraft.client.gui.GuiCartWork", "Railcraft Work Cart");
-
 
         if (craftingTables.size() > 0) {
             logInfo("%d crafting tables registered", craftingTables.size());

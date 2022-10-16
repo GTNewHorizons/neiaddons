@@ -10,12 +10,11 @@
 package net.bdew.neiaddons.developer;
 
 import codechicken.nei.guihook.IContainerTooltipHandler;
+import java.util.List;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
-
-import java.util.List;
 
 public class DeveloperGuiHandler implements IContainerTooltipHandler {
     @Override
@@ -36,8 +35,7 @@ public class DeveloperGuiHandler implements IContainerTooltipHandler {
             tip.add("S: " + slot.getClass().getSimpleName());
             if (slot.inventory != null)
                 tip.add(String.format("I: %s (#%d)", slot.inventory.getClass().getSimpleName(), slot.getSlotIndex()));
-            else
-                tip.add(String.format("%sI: NULL", EnumChatFormatting.RED));
+            else tip.add(String.format("%sI: NULL", EnumChatFormatting.RED));
             tip.add(String.format("%d/%d", slot.xDisplayPosition, slot.yDisplayPosition));
         }
         return tip;
@@ -49,7 +47,8 @@ public class DeveloperGuiHandler implements IContainerTooltipHandler {
     }
 
     @Override
-    public List<String> handleItemTooltip(GuiContainer guiContainer, ItemStack itemStack, int i, int i1, List<String> list) {
+    public List<String> handleItemTooltip(
+            GuiContainer guiContainer, ItemStack itemStack, int i, int i1, List<String> list) {
         return list;
     }
 

@@ -14,13 +14,12 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import net.bdew.neiaddons.NEIAddons;
-import net.minecraft.nbt.NBTTagCompound;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import net.bdew.neiaddons.NEIAddons;
+import net.minecraft.nbt.NBTTagCompound;
+import org.apache.commons.lang3.StringUtils;
 
 public class ClientHandler extends SimpleChannelInboundHandler<NBTTagCompound> {
     public static Set<String> enabledCommands = new HashSet<String>();
@@ -44,7 +43,9 @@ public class ClientHandler extends SimpleChannelInboundHandler<NBTTagCompound> {
                 NEIAddons.logInfo("Received handshake from server");
                 enabledCommands.clear();
                 if (data.getInteger("version") != NEIAddons.netVersion) {
-                    NEIAddons.logWarning("Client/Server version mismatch! client=%d server=%d", data.getInteger("version"), NEIAddons.netVersion);
+                    NEIAddons.logWarning(
+                            "Client/Server version mismatch! client=%d server=%d",
+                            data.getInteger("version"), NEIAddons.netVersion);
                     return;
                 }
                 String cmds = data.getString("commands");

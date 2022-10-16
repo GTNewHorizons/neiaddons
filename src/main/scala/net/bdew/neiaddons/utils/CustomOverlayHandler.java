@@ -9,6 +9,8 @@
 
 package net.bdew.neiaddons.utils;
 
+import static codechicken.nei.NEIServerUtils.areStacksSameType;
+
 import codechicken.nei.LayoutManager;
 import codechicken.nei.NEIClientUtils;
 import codechicken.nei.OffsetPositioner;
@@ -18,6 +20,7 @@ import codechicken.nei.api.IOverlayHandler;
 import codechicken.nei.api.IStackPositioner;
 import codechicken.nei.guihook.GuiContainerManager;
 import codechicken.nei.recipe.IRecipeHandler;
+import java.util.List;
 import net.bdew.neiaddons.NEIAddons;
 import net.bdew.neiaddons.network.ClientHandler;
 import net.bdew.neiaddons.network.PacketHelper;
@@ -28,17 +31,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import java.util.List;
-
-import static codechicken.nei.NEIServerUtils.areStacksSameType;
-
 public class CustomOverlayHandler implements IOverlayHandler {
     private boolean invert;
     private String command;
     private int xOffs, yOffs;
     private Class<? extends Slot> craftingSlot;
 
-    public CustomOverlayHandler(String command, int xOffs, int yOffs, boolean invert, Class<? extends Slot> craftingSlot) {
+    public CustomOverlayHandler(
+            String command, int xOffs, int yOffs, boolean invert, Class<? extends Slot> craftingSlot) {
         super();
         this.command = command;
         this.xOffs = xOffs;
@@ -54,7 +54,9 @@ public class CustomOverlayHandler implements IOverlayHandler {
                 return slot;
             }
         }
-        NEIAddons.logWarning("Failed to find matching slot - (%d,%d) in %s", pstack.relx + xOffs, pstack.rely + yOffs, cont.toString());
+        NEIAddons.logWarning(
+                "Failed to find matching slot - (%d,%d) in %s",
+                pstack.relx + xOffs, pstack.rely + yOffs, cont.toString());
         return null;
     }
 
@@ -133,14 +135,14 @@ public class CustomOverlayHandler implements IOverlayHandler {
                     if (pstack != null) {
 
                         Slot slotTo = findMatchingSlot(cont, pstack);
-                        if (slotTo == null)
-                            continue;
+                        if (slotTo == null) continue;
 
                         Slot slotFrom = findItem(cont, pstack);
-                        if (slotFrom == null)
-                            continue;
+                        if (slotFrom == null) continue;
 
-                        NEIAddons.logInfo("Moving from slot %s[%d] to %s[%d]", slotFrom.toString(), slotFrom.slotNumber, slotTo.toString(), slotTo.slotNumber);
+                        NEIAddons.logInfo(
+                                "Moving from slot %s[%d] to %s[%d]",
+                                slotFrom.toString(), slotFrom.slotNumber, slotTo.toString(), slotTo.slotNumber);
 
                         // pick up item
                         manager.handleSlotClick(slotFrom.slotNumber, 0, 0);

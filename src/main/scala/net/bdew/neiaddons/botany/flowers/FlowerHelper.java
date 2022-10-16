@@ -44,7 +44,8 @@ public class FlowerHelper {
             FlowerBreedingHandler breedingRecipeHandler = new FlowerBreedingHandler();
             API.registerRecipeHandler(breedingRecipeHandler);
             API.registerUsageHandler(breedingRecipeHandler);
-            AddonBotany.instance.registerWithNEIPlugins(breedingRecipeHandler.getRecipeName(), breedingRecipeHandler.getRecipeIdent());
+            AddonBotany.instance.registerWithNEIPlugins(
+                    breedingRecipeHandler.getRecipeName(), breedingRecipeHandler.getRecipeIdent());
         }
 
         API.addOption(new MutationDumper(root, "flower_mutation"));

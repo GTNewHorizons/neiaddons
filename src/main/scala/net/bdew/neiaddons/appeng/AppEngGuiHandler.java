@@ -27,32 +27,33 @@ public class AppEngGuiHandler extends INEIGuiAdapter {
         if (AddonAppeng.clsBaseGui.isInstance(gui)) {
             final Slot currentSlot = getSlotAtPosition(gui, mouseX, mouseY);
 
-            if (currentSlot != null && AddonAppeng.clsSlotFake.isInstance(currentSlot) && SlotHelper.isSlotEnabled(currentSlot)) {
+            if (currentSlot != null
+                    && AddonAppeng.clsSlotFake.isInstance(currentSlot)
+                    && SlotHelper.isSlotEnabled(currentSlot)) {
 
                 if (ClientHandler.enabledCommands.contains(AddonAppeng.setWorkbenchCommand)) {
                     final ItemStack stack = draggedStack.copy();
 
                     stack.stackSize = Math.min(stack.stackSize, 127);
 
-                    if (button == 0) { //left
+                    if (button == 0) { // left
                         setWorkbenchCommand(currentSlot.slotNumber, stack, true);
-                    } else if (button == 1) { //right
+                    } else if (button == 1) { // right
                         stack.stackSize = 1;
                         setWorkbenchCommand(currentSlot.slotNumber, stack, false);
-                    } else if (button == 2) { //middle
+                    } else if (button == 2) { // middle
                         setWorkbenchCommand(currentSlot.slotNumber, stack, true);
                         draggedStack.stackSize -= stack.stackSize;
                     }
-                    
+
                     return true;
                 } else {
-                    Minecraft.getMinecraft().thePlayer.addChatMessage(
-                            new ChatComponentTranslation("bdew.neiaddons.noserver").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED))
-                    );
+                    Minecraft.getMinecraft()
+                            .thePlayer
+                            .addChatMessage(new ChatComponentTranslation("bdew.neiaddons.noserver")
+                                    .setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
                 }
-
             }
-
         }
 
         return super.handleDragNDrop(gui, mouseX, mouseY, draggedStack, button);
@@ -68,8 +69,7 @@ public class AppEngGuiHandler extends INEIGuiAdapter {
         return mouseX >= slotX - 1 && mouseX < slotX + slotW + 1 && mouseY >= slotY - 1 && mouseY < slotY + slotH + 1;
     }
 
-    private void setWorkbenchCommand(int slotNum, ItemStack stack, boolean replace)
-    {
+    private void setWorkbenchCommand(int slotNum, ItemStack stack, boolean replace) {
         NBTTagCompound message = new NBTTagCompound();
         message.setInteger("slot", slotNum);
         message.setBoolean("replace", replace);
@@ -81,17 +81,15 @@ public class AppEngGuiHandler extends INEIGuiAdapter {
         PacketHelper.sendToServer(AddonAppeng.setWorkbenchCommand, message);
     }
 
-    private Slot getSlotAtPosition(GuiContainer gui, int x, int y)
-	{
-		for (int k = 0; k < gui.inventorySlots.inventorySlots.size(); ++k) {
-			Slot slot = (Slot)gui.inventorySlots.inventorySlots.get(k);
+    private Slot getSlotAtPosition(GuiContainer gui, int x, int y) {
+        for (int k = 0; k < gui.inventorySlots.inventorySlots.size(); ++k) {
+            Slot slot = (Slot) gui.inventorySlots.inventorySlots.get(k);
 
-			if (isMouseOverSlot(gui, slot, x, y)) {
-				return slot;
-			}
-		}
+            if (isMouseOverSlot(gui, slot, x, y)) {
+                return slot;
+            }
+        }
 
-		return null;
-	}
-
+        return null;
+    }
 }

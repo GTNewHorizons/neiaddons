@@ -25,10 +25,10 @@ public class TypedMethod<T> {
     public T call(Object obj, Object... args) {
         try {
             Object res = field.invoke(obj, args);
-            if (cls.isInstance(res))
-                return (T) res;
+            if (cls.isInstance(res)) return (T) res;
             else
-                throw new RuntimeException(String.format("Wrong return type. Expected %s, got %s", cls, res.getClass()));
+                throw new RuntimeException(
+                        String.format("Wrong return type. Expected %s, got %s", cls, res.getClass()));
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
