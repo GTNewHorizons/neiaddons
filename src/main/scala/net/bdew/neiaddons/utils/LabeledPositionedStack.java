@@ -12,15 +12,27 @@ package net.bdew.neiaddons.utils;
 import codechicken.nei.PositionedStack;
 import net.bdew.neiaddons.Utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class LabeledPositionedStack extends PositionedStack {
 
     private final String label;
     private final int yoffs;
+    private final ArrayList<String> tooltip = new ArrayList<>();
 
     public LabeledPositionedStack(Object stack, int x, int y, String label, int yoffs) {
         super(stack, x, y);
         this.label = label;
         this.yoffs = yoffs;
+    }
+
+    public LabeledPositionedStack(Object stack, int x, int y, String label, int yoffs, String... tooltip) {
+        super(stack, x, y);
+        this.label = label;
+        this.yoffs = yoffs;
+        this.tooltip.addAll(Arrays.asList(tooltip));
     }
 
     public void drawLabel() {
@@ -32,5 +44,9 @@ public class LabeledPositionedStack extends PositionedStack {
         } else {
             Utils.drawCenteredString(label, relx + 8, rely + 8 + yoffs, 0xFFFFFF);
         }
+    }
+
+    public List<String> getTooltip(){
+        return tooltip;
     }
 }
