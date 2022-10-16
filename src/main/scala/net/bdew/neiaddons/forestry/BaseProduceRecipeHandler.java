@@ -64,15 +64,16 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
                 products.add(new LabeledPositionedStack(product.getKey(), 96 + 22 * i++, 8, label, 10));
             }
 
+            String jubilance = null;
+            if (species instanceof IAlleleBeeSpeciesCustom) {
+                IJubilanceProvider provider = ((IAlleleBeeSpeciesCustom) species).getJubilanceProvider();
+                if (provider != null) jubilance = provider.getDescription();
+            }
+
             i = 0;
             for (Entry<ItemStack, Float> product : Utils.mergeStacks(GeneticsUtils.getSpecialtyFromSpecies(species))
                     .entrySet()) {
                 String label = String.format("%.1f%%", product.getValue() * 100F);
-                String jubilance = null;
-                if (species instanceof IAlleleBeeSpeciesCustom) {
-                    IJubilanceProvider provider = ((IAlleleBeeSpeciesCustom) species).getJubilanceProvider();
-                    if (provider != null) jubilance = provider.getDescription();
-                }
                 if (jubilance != null)
                     products.add(new LabeledPositionedStack(
                             product.getKey(), 96 + 22 * i++, 36, label, 10, EnumChatFormatting.GRAY + jubilance));
