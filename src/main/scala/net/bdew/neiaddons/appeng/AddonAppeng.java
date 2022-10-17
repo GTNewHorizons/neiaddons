@@ -35,6 +35,7 @@ public class AddonAppeng extends BaseAddon {
     public static AddonAppeng instance;
 
     public static final String setWorkbenchCommand = "SetAE2FakeSlot";
+    public static String[] blackListGuiName;
 
     public static Class<? extends GuiContainer> clsBaseGui;
     public static Class<? extends Container> clsBaseContainer;
@@ -60,6 +61,17 @@ public class AddonAppeng extends BaseAddon {
     @Override
     public void init(Side side) throws Exception {
         try {
+            blackListGuiName = NEIAddons.config
+                    .get(
+                            getName(),
+                            "Blacklist Gui Class Name",
+                            new String[] {
+                                "com.glodblock.github.client.gui.GuiFluidPatternTerminal",
+                                "com.glodblock.github.client.gui.GuiFluidPatternTerminalEx"
+                            },
+                            "These Gui won't have the NEI drag item handler from NEI addon.")
+                    .getStringList();
+
             clsBaseContainer = Utils.getAndCheckClass("appeng.container.AEBaseContainer", Container.class);
             clsSlotFake = Utils.getAndCheckClass("appeng.container.slot.SlotFake", Slot.class);
             mSlotFakeIsEnabled = clsSlotFake.getMethod("isEnabled");

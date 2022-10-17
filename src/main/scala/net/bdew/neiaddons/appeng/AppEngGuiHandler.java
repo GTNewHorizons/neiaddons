@@ -24,12 +24,10 @@ import net.minecraft.util.EnumChatFormatting;
 public class AppEngGuiHandler extends INEIGuiAdapter {
     @Override
     public boolean handleDragNDrop(GuiContainer gui, int mouseX, int mouseY, ItemStack draggedStack, int button) {
-        if (AddonAppeng.clsBaseGui.isInstance(gui)) {
+        if (AddonAppeng.clsBaseGui.isInstance(gui) && !checkBlacklist(gui)) {
             final Slot currentSlot = getSlotAtPosition(gui, mouseX, mouseY);
 
-            if (currentSlot != null
-                    && AddonAppeng.clsSlotFake.isInstance(currentSlot)
-                    && SlotHelper.isSlotEnabled(currentSlot)) {
+            if (AddonAppeng.clsSlotFake.isInstance(currentSlot) && SlotHelper.isSlotEnabled(currentSlot)) {
 
                 if (ClientHandler.enabledCommands.contains(AddonAppeng.setWorkbenchCommand)) {
                     final ItemStack stack = draggedStack.copy();
@@ -57,6 +55,16 @@ public class AppEngGuiHandler extends INEIGuiAdapter {
         }
 
         return super.handleDragNDrop(gui, mouseX, mouseY, draggedStack, button);
+    }
+
+    private boolean checkBlacklist(GuiContainer gui) {
+        String name = gui.getClass().getName();
+        for (String blacklist : AddonAppeng.blackListGuiName) {
+            if (blacklist.equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isMouseOverSlot(GuiContainer gui, Slot slot, int mouseX, int mouseY) {

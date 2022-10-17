@@ -22,9 +22,9 @@ public class SetFakeSlotCommandHandler implements SubPacketHandler {
         ItemStack stack = ItemStack.loadItemStackFromNBT(data.getCompoundTag("item"));
         int slotNum = data.getInteger("slot");
         Container cont = player.openContainer;
-        if ((cont != null) && AddonAppeng.clsBaseContainer.isInstance(cont)) {
+        if (AddonAppeng.clsBaseContainer.isInstance(cont)) {
             Slot slot = cont.getSlot(slotNum);
-            if ((slot != null) && AddonAppeng.clsSlotFake.isInstance(slot) && SlotHelper.isSlotEnabled(slot)) {
+            if (AddonAppeng.clsSlotFake.isInstance(slot) && SlotHelper.isSlotEnabled(slot)) {
                 ItemStack targetStack = slot.getStack();
                 if (null != targetStack && !data.getBoolean("replace") && stack.isItemEqual(targetStack)) {
                     stack.stackSize = slot.getStack().stackSize + stack.stackSize;
