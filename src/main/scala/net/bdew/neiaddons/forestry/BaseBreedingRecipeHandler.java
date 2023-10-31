@@ -6,7 +6,8 @@
 
 package net.bdew.neiaddons.forestry;
 
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;

@@ -6,13 +6,13 @@
 
 package net.bdew.neiaddons.exnihilo;
 
-import mcp.mobius.waila.api.IWailaRegistrar;
-
 import net.bdew.neiaddons.Utils;
 import net.bdew.neiaddons.exnihilo.waila.BarrelHandler;
 import net.bdew.neiaddons.exnihilo.waila.BeeTrapHandler;
 import net.bdew.neiaddons.exnihilo.waila.CrucibleHandler;
 import net.minecraft.tileentity.TileEntity;
+
+import mcp.mobius.waila.api.IWailaRegistrar;
 
 public class WailaHandler {
 
