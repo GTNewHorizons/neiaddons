@@ -200,7 +200,7 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
     }
 
     @Override
-    public List<String> handleTooltip(GuiRecipe gui, List<String> currenttip, int recipe) {
+    public List<String> handleTooltip(GuiRecipe<?> gui, List<String> currenttip, int recipe) {
         CachedBreedingRecipe rec = (CachedBreedingRecipe) arecipes.get(recipe);
         if (AddonForestry.showReqs && rec.requirements.size() > 0
                 && GuiContainerManager.shouldShowTooltip(gui)

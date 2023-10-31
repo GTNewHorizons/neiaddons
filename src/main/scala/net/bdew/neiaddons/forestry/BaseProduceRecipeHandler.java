@@ -142,7 +142,7 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
     }
 
     @Override
-    public List<String> handleItemTooltip(GuiRecipe gui, ItemStack stack, List<String> currenttip, int recipe) {
+    public List<String> handleItemTooltip(GuiRecipe<?> gui, ItemStack stack, List<String> currenttip, int recipe) {
         CachedProduceRecipe crecipe = (CachedProduceRecipe) this.arecipes.get(recipe);
         for (LabeledPositionedStack positionedStack : crecipe.getProducts())
             if (stack == positionedStack.item) currenttip.addAll(positionedStack.getTooltip());
