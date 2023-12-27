@@ -32,7 +32,7 @@ import cpw.mods.fml.relauncher.Side;
         dependencies = "after:NotEnoughItems")
 public class NEIAddons {
 
-    public static final String modVersion = "GRADLETOKEN_VERSION";
+    public static final String modVersion = Tags.VERSION;
     public static final String modId = "NEIAddons";
     public static final String modName = "NEI Addons";
     public static final String channelId = "bdew.neiaddons";
