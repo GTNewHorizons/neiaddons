@@ -200,7 +200,6 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
         }
     }
 
-
     public abstract String getRecipeIdent();
 
     @Override
