@@ -183,14 +183,23 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
         rec.result.drawLabel();
         rec.parrent1.drawLabel();
         rec.parrent2.drawLabel();
-        if (rec.derp) {
-            Utils.drawCenteredString(EnumChatFormatting.OBFUSCATED + "DERP", 108, 15, 0xFF0000);
-        } else if (rec.requirements.size() > 0 && AddonForestry.showReqs) {
-            Utils.drawCenteredString(String.format("[%.0f%%]", rec.chance), 108, 15, 0xFF0000);
+
+        String chanceText;
+        if (rec.chance < 1) {
+            chanceText = "<1%";
         } else {
-            Utils.drawCenteredString(String.format("%.0f%%", rec.chance), 108, 15, 0xFFFFFF);
+            chanceText = String.format("%.0f%%", rec.chance);
+        }
+
+        if (rec.derp) {
+            Utils.drawCenteredString(EnumChatFormatting.OBFUSCATED + "DERP", 108, 15, 0xFF0000); // RED
+        } else if (!rec.requirements.isEmpty() && AddonForestry.showReqs) {
+            Utils.drawCenteredString("[" + chanceText + "]", 108, 15, 0xFF0000); // RED
+        } else {
+            Utils.drawCenteredString(chanceText, 108, 15, 0xFFFFFF);
         }
     }
+
 
     public abstract String getRecipeIdent();
 
@@ -202,15 +211,16 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
     @Override
     public List<String> handleTooltip(GuiRecipe<?> gui, List<String> currenttip, int recipe) {
         CachedBreedingRecipe rec = (CachedBreedingRecipe) arecipes.get(recipe);
-        if (AddonForestry.showReqs && rec.requirements.size() > 0
+        if (AddonForestry.showReqs && !rec.requirements.isEmpty()
                 && GuiContainerManager.shouldShowTooltip(gui)
-                && currenttip.size() == 0) {
+                && currenttip.isEmpty()) {
             Point offset = gui.getRecipePosition(recipe);
             Point pos = GuiDraw.getMousePosition();
             Point relMouse = new Point(pos.x - gui.guiLeft - offset.x, pos.y - gui.guiTop - offset.y);
             Rectangle tiprect = new Rectangle(108 - 24, 15 - 2, 48, 12);
             if (tiprect.contains(relMouse)) {
                 currenttip.addAll(rec.requirements);
+                currenttip.add(I18n.format("bdew.neiaddons.breeding.mutationchance") + ": " + rec.chance + "%");
                 return currenttip;
             }
         }
