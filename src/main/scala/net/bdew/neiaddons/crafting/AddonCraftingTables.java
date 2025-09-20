@@ -71,6 +71,10 @@ public class AddonCraftingTables extends BaseAddon {
         tryLoadTableClass("BiblioCraft", "jds.bibliocraft.gui.GuiFancyWorkbench", "BiblioCraft Fancy Workbench");
         tryLoadTableClass("RIO", "remoteio.client.gui.GuiIntelligentWorkbench", "RemoteIO Intelligent Workbench");
         tryLoadTableClass("Railcraft", "mods.railcraft.client.gui.GuiCartWork", "Railcraft Work Cart");
+        tryLoadTableClass(
+                "GalacticraftAmunRa",
+                "de.katzenpapst.amunra.client.gui.GuiCrafter",
+                "Amun-Ra Crafting Table");
 
         if (craftingTables.size() > 0) {
             logInfo("%d crafting tables registered", craftingTables.size());
