@@ -1,8 +1,8 @@
 // Add your dependencies here
 
 dependencies {
-    api('com.github.GTNewHorizons:NotEnoughItems:2.8.93-GTNH:dev')
+    api('com.github.GTNewHorizons:NotEnoughItems:2.8.111-GTNH:dev')
 
-    implementation('com.github.GTNewHorizons:ForestryMC:4.11.14:dev')
-    implementation('com.github.GTNewHorizons:waila:1.19.22:dev')
+    implementation('com.github.GTNewHorizons:ForestryMC:4.11.30:dev')
+    implementation('com.github.GTNewHorizons:waila:1.19.30:dev')
 }

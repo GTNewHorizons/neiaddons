@@ -19,24 +19,42 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import codechicken.nei.api.API;
+import codechicken.nei.event.NEIRegisterHandlerInfosEvent;
+import codechicken.nei.recipe.HandlerInfo;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
+import forestry.core.config.Constants;
 
 public class TreeHelper {
 
     public static Collection<IAlleleTreeSpecies> allSpecies;
-    public static Map<Item, Collection<IAlleleSpecies>> productsCache = new HashMap<Item, Collection<IAlleleSpecies>>();
+    public static Map<Item, Collection<IAlleleSpecies>> productsCache = new HashMap<>();
 
     public static ITreeRoot root;
 
     private static void addProductToCache(Item item, IAlleleTreeSpecies species) {
         if (!productsCache.containsKey(item)) {
-            productsCache.put(item, new ArrayList<IAlleleSpecies>());
+            productsCache.put(item, new ArrayList<>());
         }
         productsCache.get(item).add(species);
+    }
+
+    public static void registerHandlerInfo(NEIRegisterHandlerInfosEvent event) {
+        if (AddonForestry.showTreeMutations) {
+            event.registerHandlerInfo(
+                    new HandlerInfo.Builder(TreeBreedingHandler.class, Constants.MOD, Constants.ID)
+                            .setShowOverlayButton(false).setShowFavoritesButton(false)
+                            .setDisplayStack("Forestry:saplingGE", null).build());
+        }
+        if (AddonForestry.showTreeProducts) {
+            event.registerHandlerInfo(
+                    new HandlerInfo.Builder(TreeProduceHandler.class, Constants.MOD, Constants.ID)
+                            .setShowOverlayButton(false).setShowFavoritesButton(false)
+                            .setDisplayStack("Forestry:saplingGE", null).build());
+        }
     }
 
     public static void setup() {
