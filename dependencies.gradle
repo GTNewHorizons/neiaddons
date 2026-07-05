@@ -3,6 +3,6 @@
 dependencies {
     api('com.github.GTNewHorizons:NotEnoughItems:2.8.111-GTNH:dev')
 
-    implementation('com.github.GTNewHorizons:ForestryMC:4.11.30:dev')
+    implementation('com.github.GTNewHorizons:ForestryMC:4.11.31:dev')
     implementation('com.github.GTNewHorizons:waila:1.19.30:dev')
 }
