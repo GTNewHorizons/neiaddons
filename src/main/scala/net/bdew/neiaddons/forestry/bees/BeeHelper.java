@@ -21,6 +21,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import codechicken.nei.api.API;
+import codechicken.nei.event.NEIRegisterHandlerInfosEvent;
+import codechicken.nei.recipe.HandlerInfo;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.apiculture.EnumBeeType;
@@ -28,17 +30,18 @@ import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
+import forestry.core.config.Constants;
 
 public class BeeHelper {
 
     public static Collection<IAlleleBeeSpecies> allSpecies;
-    public static Map<Item, Collection<IAlleleSpecies>> productsCache = new HashMap<Item, Collection<IAlleleSpecies>>();
+    public static Map<Item, Collection<IAlleleSpecies>> productsCache = new HashMap<>();
 
     public static IBeeRoot root;
 
     private static void addProductToCache(Item item, IAlleleBeeSpecies species) {
         if (!productsCache.containsKey(item)) {
-            productsCache.put(item, new ArrayList<IAlleleSpecies>());
+            productsCache.put(item, new ArrayList<>());
         }
         productsCache.get(item).add(species);
     }
@@ -60,6 +63,21 @@ public class BeeHelper {
             AddonForestry.instance.registerWithNEIPlugins(
                     productsRecipeHandler.getRecipeName(),
                     productsRecipeHandler.getRecipeIdent());
+        }
+    }
+
+    public static void registerHandlerInfo(NEIRegisterHandlerInfosEvent event) {
+        if (AddonForestry.showBeeMutations) {
+            event.registerHandlerInfo(
+                    new HandlerInfo.Builder(BeeBreedingHandler.class, Constants.MOD, Constants.ID)
+                            .setShowOverlayButton(false).setShowFavoritesButton(false)
+                            .setDisplayStack("Forestry:beeQueenGE", null).build());
+        }
+        if (AddonForestry.showBeeProducts) {
+            event.registerHandlerInfo(
+                    new HandlerInfo.Builder(BeeProduceHandler.class, Constants.MOD, Constants.ID)
+                            .setShowOverlayButton(false).setShowFavoritesButton(false)
+                            .setDisplayStack("Forestry:beeQueenGE", null).build());
         }
     }
 
@@ -124,7 +142,7 @@ public class BeeHelper {
     }
 
     private static List<Item> getMobCombs() {
-        List<Item> res = new ArrayList<Item>();
+        List<Item> res = new ArrayList<>();
 
         Item vanillaComb = GameRegistry.findItem("Forestry", "beeCombs");
 

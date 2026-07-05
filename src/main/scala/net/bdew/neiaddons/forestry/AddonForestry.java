@@ -12,12 +12,15 @@ import net.bdew.neiaddons.forestry.bees.BeeHelper;
 import net.bdew.neiaddons.forestry.butterflies.ButterflyHelper;
 import net.bdew.neiaddons.forestry.trees.TreeHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.common.MinecraftForge;
 
+import codechicken.nei.event.NEIRegisterHandlerInfosEvent;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -62,6 +65,10 @@ public class AddonForestry extends BaseAddon {
 
     @Override
     public void init(Side side) throws Exception {
+        if (side == Side.CLIENT) {
+            MinecraftForge.EVENT_BUS.register(this);
+        }
+
         showBeeMutations = NEIAddons.config
                 .get(getName(), "Show Bee Mutations", true, "Set to false to disable bee mutations browsing")
                 .getBoolean(false);
@@ -134,5 +141,13 @@ public class AddonForestry extends BaseAddon {
         BeeHelper.setup();
         TreeHelper.setup();
         ButterflyHelper.setup();
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void registerHandlerInfo(NEIRegisterHandlerInfosEvent event) {
+        BeeHelper.registerHandlerInfo(event);
+        TreeHelper.registerHandlerInfo(event);
+        ButterflyHelper.registerHandlerInfo(event);
     }
 }

@@ -13,24 +13,28 @@ import net.bdew.neiaddons.forestry.AddonForestry;
 import net.bdew.neiaddons.forestry.GeneticsUtils;
 
 import codechicken.nei.api.API;
+import codechicken.nei.event.NEIRegisterHandlerInfosEvent;
+import codechicken.nei.recipe.HandlerInfo;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterflyRoot;
+import forestry.core.config.Constants;
 
 public class ButterflyHelper {
 
     public static Collection<IAlleleButterflySpecies> allSpecies;
-    // public static Map<Integer, Collection<IAlleleSpecies>> productsCache;
 
     public static IButterflyRoot root;
 
-    // private static void addProductToCache(int id, IAlleleBeeSpecies species) {
-    // if (!productsCache.containsKey(id)) {
-    // productsCache.put(id, new ArrayList<IAlleleSpecies>());
-    // }
-    // productsCache.get(id).add(species);
-    // }
+    public static void registerHandlerInfo(NEIRegisterHandlerInfosEvent event) {
+        if (AddonForestry.showButterflyMutations) {
+            event.registerHandlerInfo(
+                    new HandlerInfo.Builder(ButterflyBreedingHandler.class, Constants.MOD, Constants.ID)
+                            .setShowOverlayButton(false).setShowFavoritesButton(false)
+                            .setDisplayStack("Forestry:butterflyGE", null).build());
+        }
+    }
 
     public static void setup() {
         root = (IButterflyRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies");

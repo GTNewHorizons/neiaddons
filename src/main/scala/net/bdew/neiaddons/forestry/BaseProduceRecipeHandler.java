@@ -7,6 +7,7 @@
 package net.bdew.neiaddons.forestry;
 
 import java.awt.Rectangle;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,6 +23,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
+import org.lwjgl.opengl.GL11;
+
+import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIClientUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiRecipe;
@@ -34,6 +38,8 @@ import forestry.api.genetics.ISpeciesRoot;
 
 public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
 
+    private static final int ROW_HEIGHT = 27;
+    private static final DecimalFormat productChance = new DecimalFormat("0.#");
     private final ISpeciesRoot speciesRoot;
     private final Map<Item, Collection<IAlleleSpecies>> cache;
 
@@ -46,6 +52,7 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
 
         private LabeledPositionedStack producer;
         private final ArrayList<LabeledPositionedStack> products;
+        private final int numProductRows, numSpecRows, height;
 
         public CachedProduceRecipe(IAlleleSpecies species) {
             ItemStack producerStack = GeneticsUtils.stackFromSpecies(species, GeneticsUtils.RecipePosition.Producer);
@@ -60,9 +67,13 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
             int i = 0;
             for (Entry<ItemStack, Float> product : Utils.mergeStacks(GeneticsUtils.getProduceFromSpecies(species))
                     .entrySet()) {
-                String label = String.format("%.1f%%", product.getValue() * 100F);
-                products.add(new LabeledPositionedStack(product.getKey(), 96 + 22 * i++, 8, label, 10));
+                String label = productChance.format(product.getValue() * 100f) + "%";
+                int x = 96 + 22 * (i % 3);
+                int y = 8 + (i / 3) * ROW_HEIGHT;
+                products.add(new LabeledPositionedStack(product.getKey(), x, y, label, 10));
+                i++;
             }
+            numProductRows = Math.max((int) Math.ceil(i / 3.0), 1);
 
             String jubilance = null;
             if (species instanceof IAlleleBeeSpeciesCustom) {
@@ -73,33 +84,39 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
             i = 0;
             for (Entry<ItemStack, Float> product : Utils.mergeStacks(GeneticsUtils.getSpecialtyFromSpecies(species))
                     .entrySet()) {
-                String label = String.format("%.1f%%", product.getValue() * 100F);
+                String label = productChance.format(product.getValue() * 100f) + "%";
+                int x = 96 + 22 * (i % 3);
+                int y = 36 + ((i / 3) + (numProductRows - 1)) * ROW_HEIGHT;
                 if (jubilance != null) products.add(
                         new LabeledPositionedStack(
                                 product.getKey(),
-                                96 + 22 * i++,
-                                36,
+                                x,
+                                y,
                                 label,
                                 10,
                                 EnumChatFormatting.GRAY + jubilance));
-                else products.add(new LabeledPositionedStack(product.getKey(), 96 + 22 * i++, 36, label, 10));
+                else products.add(new LabeledPositionedStack(product.getKey(), x, y, label, 10));
+                i++;
             }
+            numSpecRows = Math.max((int) Math.ceil(i / 3.0), 1);
+
+            height = (numProductRows + numSpecRows) * ROW_HEIGHT + 10;
         }
 
         public boolean isNoOutput() {
-            return products.size() == 0;
+            return products.isEmpty();
         }
 
         @Override
         public ArrayList<PositionedStack> getIngredients() {
-            ArrayList<PositionedStack> list = new ArrayList<PositionedStack>();
+            ArrayList<PositionedStack> list = new ArrayList<>();
             list.add(producer);
             return list;
         }
 
         @Override
         public ArrayList<PositionedStack> getOtherStacks() {
-            ArrayList<PositionedStack> list = new ArrayList<PositionedStack>();
+            ArrayList<PositionedStack> list = new ArrayList<>();
             if (products.size() > 1) {
                 for (int i = 1; i < products.size(); i++) {
                     list.add(products.get(i));
@@ -110,7 +127,7 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
 
         @Override
         public PositionedStack getResult() {
-            if (products.size() > 0) {
+            if (!products.isEmpty()) {
                 return products.get(0);
             } else {
                 return null;
@@ -194,6 +211,32 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
     }
 
     @Override
+    public void drawBackground(int recipe) {
+        CachedProduceRecipe rec = (CachedProduceRecipe) arecipes.get(recipe);
+        GL11.glColor4f(1, 1, 1, 1);
+        GuiDraw.changeTexture(getGuiTexture());
+
+        int y = 7;
+        // Top
+        GuiDraw.drawTexturedModalRect(4, 4, 0, 0, 160, 3);
+        // Prod
+        for (int i = 0; i < rec.numProductRows; i++) {
+            GuiDraw.drawTexturedModalRect(4, y, 0, 3, 160, ROW_HEIGHT);
+            y += ROW_HEIGHT;
+        }
+        // Spec
+        for (int i = 0; i < rec.numSpecRows; i++) {
+            GuiDraw.drawTexturedModalRect(4, y, 0, 3 + ROW_HEIGHT, 160, ROW_HEIGHT);
+            y += ROW_HEIGHT;
+        }
+        // Bottom
+        GuiDraw.drawTexturedModalRect(4, y, 0, 58, 160, 2);
+
+        // Input BG
+        GuiDraw.drawTexturedModalRect(19, 16, 160, 0, 51, 22);
+    }
+
+    @Override
     public void drawExtras(int recipe) {
         CachedProduceRecipe rec = (CachedProduceRecipe) arecipes.get(recipe);
         rec.producer.drawLabel();
@@ -202,7 +245,7 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
         }
         FontRenderer f = Minecraft.getMinecraft().fontRenderer;
         f.drawString("Prod:", 65, 8 + 4, 0xFFFFFF);
-        f.drawString("Spec:", 65, 36 + 4, 0xFFF200);
+        f.drawString("Spec:", 65, 36 + 4 + (rec.numProductRows - 1) * ROW_HEIGHT, 0xFFF200);
     }
 
     public abstract String getRecipeIdent();
@@ -219,5 +262,11 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
     @Override
     public final String getRecipeName() {
         return I18n.format("bdew.neiaddons.produce." + getRecipeIdent());
+    }
+
+    @Override
+    public int getRecipeHeight(int recipe) {
+        CachedProduceRecipe rec = (CachedProduceRecipe) arecipes.get(recipe);
+        return rec.height;
     }
 }
