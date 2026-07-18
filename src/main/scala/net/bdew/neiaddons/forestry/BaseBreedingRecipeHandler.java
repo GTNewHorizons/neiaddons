@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.bdew.neiaddons.Utils;
+import net.bdew.neiaddons.utils.ColorUtils;
 import net.bdew.neiaddons.utils.LabeledPositionedStack;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -192,11 +193,11 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
         }
 
         if (rec.derp) {
-            Utils.drawCenteredString(EnumChatFormatting.OBFUSCATED + "DERP", 108, 15, 0xFF0000); // RED
+            Utils.drawCenteredString(EnumChatFormatting.OBFUSCATED + "DERP", 108, 15, ColorUtils.neiChanceTextRed.getColor());
         } else if (!rec.requirements.isEmpty() && AddonForestry.showReqs) {
-            Utils.drawCenteredString("[" + chanceText + "]", 108, 15, 0xFF0000); // RED
+            Utils.drawCenteredString("[" + chanceText + "]", 108, 15, ColorUtils.neiChanceTextRed.getColor());
         } else {
-            Utils.drawCenteredString(chanceText, 108, 15, 0xFFFFFF);
+            Utils.drawCenteredString(chanceText, 108, 15, ColorUtils.neiChanceTextNormal.getColor());
         }
     }
 
