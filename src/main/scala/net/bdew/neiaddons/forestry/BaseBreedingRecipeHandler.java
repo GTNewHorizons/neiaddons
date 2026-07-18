@@ -193,7 +193,11 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
         }
 
         if (rec.derp) {
-            Utils.drawCenteredString(EnumChatFormatting.OBFUSCATED + "DERP", 108, 15, ColorUtils.neiChanceTextRed.getColor());
+            Utils.drawCenteredString(
+                    EnumChatFormatting.OBFUSCATED + "DERP",
+                    108,
+                    15,
+                    ColorUtils.neiChanceTextRed.getColor());
         } else if (!rec.requirements.isEmpty() && AddonForestry.showReqs) {
             Utils.drawCenteredString("[" + chanceText + "]", 108, 15, ColorUtils.neiChanceTextRed.getColor());
         } else {

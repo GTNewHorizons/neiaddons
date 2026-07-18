@@ -2,10 +2,6 @@ package net.bdew.neiaddons.utils;
 
 import com.gtnewhorizon.gtnhlib.color.ColorResource;
 
-
-
-
-
 public class ColorUtils {
 
     private static final ColorResource.Factory color = new ColorResource.Factory("neiaddons");
@@ -16,8 +12,6 @@ public class ColorUtils {
         neiChanceTextRed    = color.rgb("neiChanceTextRed",     "0xFFFFFF"),
         neiLabel            = color.rgb("neiLabel",             "0xFFFFFF"),
         neiProd             = color.rgb("neiProd",              "0xFFFFFF"),
-        neiSpec             = color.rgb("neiProd",               "0xFFF200")
-        
-        ;
+        neiSpec             = color.rgb("neiProd",              "0xFFF200");
     // spotless:on
 }
