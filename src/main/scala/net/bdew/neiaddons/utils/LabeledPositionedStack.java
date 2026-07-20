@@ -37,10 +37,10 @@ public class LabeledPositionedStack extends PositionedStack {
         if (label.contains(" ")) {
             String[] parts = label.split(" ");
             for (int i = 0; i < parts.length; i++) {
-                Utils.drawCenteredString(parts[i], relx + 8, rely + 8 + yoffs + 9 * i, 0xFFFFFF);
+                Utils.drawCenteredString(parts[i], relx + 8, rely + 8 + yoffs + 9 * i, ColorUtils.neiLabel.getColor());
             }
         } else {
-            Utils.drawCenteredString(label, relx + 8, rely + 8 + yoffs, 0xFFFFFF);
+            Utils.drawCenteredString(label, relx + 8, rely + 8 + yoffs, ColorUtils.neiLabel.getColor());
         }
     }
 

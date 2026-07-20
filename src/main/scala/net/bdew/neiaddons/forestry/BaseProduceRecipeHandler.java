@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.bdew.neiaddons.Utils;
+import net.bdew.neiaddons.utils.ColorUtils;
 import net.bdew.neiaddons.utils.LabeledPositionedStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -244,8 +245,12 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
             stack.drawLabel();
         }
         FontRenderer f = Minecraft.getMinecraft().fontRenderer;
-        f.drawString("Prod:", 65, 8 + 4, 0xFFFFFF);
-        f.drawString("Spec:", 65, 36 + 4 + (rec.numProductRows - 1) * ROW_HEIGHT, 0xFFF200);
+        f.drawString(I18n.format("bdew.neiaddons.produce.prod"), 65, 8 + 4, ColorUtils.neiProd.getColor());
+        f.drawString(
+                I18n.format("bdew.neiaddons.produce.spec"),
+                65,
+                36 + 4 + (rec.numProductRows - 1) * ROW_HEIGHT,
+                ColorUtils.neiSpec.getColor());
     }
 
     public abstract String getRecipeIdent();
