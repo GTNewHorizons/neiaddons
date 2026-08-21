@@ -8,10 +8,12 @@ package net.bdew.neiaddons.forestry.bees;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import net.bdew.neiaddons.Utils;
 import net.bdew.neiaddons.forestry.AddonForestry;
@@ -29,6 +31,7 @@ import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.core.config.Constants;
 
@@ -41,7 +44,7 @@ public class BeeHelper {
 
     private static void addProductToCache(Item item, IAlleleBeeSpecies species) {
         if (!productsCache.containsKey(item)) {
-            productsCache.put(item, new ArrayList<>());
+            productsCache.put(item, new TreeSet<>(Comparator.comparing(IAllele::getUID)));
         }
         productsCache.get(item).add(species);
     }
