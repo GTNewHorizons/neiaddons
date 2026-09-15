@@ -15,6 +15,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.bdew.neiaddons.Utils;
+import net.bdew.neiaddons.forestry.requirements.RequirementKind;
+import net.bdew.neiaddons.forestry.requirements.RequirementRenderer;
+import net.bdew.neiaddons.forestry.requirements.RequirementResolvers;
 import net.bdew.neiaddons.utils.ColorUtils;
 import net.bdew.neiaddons.utils.LabeledPositionedStack;
 import net.minecraft.client.Minecraft;
@@ -41,6 +44,8 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
 
     private static final int ROW_HEIGHT = 27;
     private static final DecimalFormat productChance = new DecimalFormat("0.#");
+    public static final int REQUIREMENT_ROW_OFFSET = 20;
+
     private final ISpeciesRoot speciesRoot;
     private final Map<Item, Collection<IAlleleSpecies>> cache;
 
@@ -54,13 +59,20 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
         private LabeledPositionedStack producer;
         private final ArrayList<LabeledPositionedStack> products;
         private final int numProductRows, numSpecRows, height;
+        private final RequirementRenderer requirementRenderer;
 
         public CachedProduceRecipe(IAlleleSpecies species) {
             ItemStack producerStack = GeneticsUtils.stackFromSpecies(species, GeneticsUtils.RecipePosition.Producer);
             if (producerStack == null) {
                 AddonForestry.instance.logWarning("Producer is null... wtf? species = %s", species.getUID());
+                requirementRenderer = RequirementRenderer.empty();
             } else {
-                producer = new LabeledPositionedStack(producerStack, 22, 19, species.getName(), 13);
+                // Label and requirement slot move down together, so species without requirements look unchanged.
+                producer = new LabeledPositionedStack(producerStack, 22, 19, species.getName(), -20);
+                requirementRenderer = new RequirementRenderer(
+                        RequirementResolvers.resolve(species, species, RequirementKind.FLOWERS, RequirementKind.POLLEN),
+                        22,
+                        19 + REQUIREMENT_ROW_OFFSET + 1);
             }
 
             products = new ArrayList<>();
@@ -111,7 +123,10 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
         @Override
         public ArrayList<PositionedStack> getIngredients() {
             ArrayList<PositionedStack> list = new ArrayList<>();
-            list.add(producer);
+            if (producer != null) {
+                list.add(producer);
+            }
+            list.addAll(requirementRenderer.asStacks());
             return list;
         }
 
@@ -194,16 +209,21 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        if (!speciesRoot.isMember(ingredient)) {
-            return;
+        IAlleleSpecies memberSpecies = null;
+        if (speciesRoot.isMember(ingredient)) {
+            IIndividual member = speciesRoot.getMember(ingredient);
+            if (member != null && member.getGenome() != null && member.getGenome().getPrimary() != null) {
+                memberSpecies = member.getGenome().getPrimary();
+                arecipes.add(new CachedProduceRecipe(memberSpecies));
+            }
         }
-        IIndividual member = speciesRoot.getMember(ingredient);
-        if (member == null || member.getGenome() == null || member.getGenome().getPrimary() == null) {
-            AddonForestry.instance
-                    .logWarning("Individual or genome is null searching recipe for %s", ingredient.toString());
-            return;
+
+        for (IAlleleSpecies species : getAllSpecies()) {
+            CachedProduceRecipe recipe = new CachedProduceRecipe(species);
+            if (species != memberSpecies && recipe.requirementRenderer.contains(ingredient)) {
+                arecipes.add(recipe);
+            }
         }
-        arecipes.add(new CachedProduceRecipe(member.getGenome().getPrimary()));
     }
 
     @Override
@@ -235,12 +255,15 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
 
         // Input BG
         GuiDraw.drawTexturedModalRect(19, 16, 160, 0, 51, 22);
+
     }
 
     @Override
     public void drawExtras(int recipe) {
         CachedProduceRecipe rec = (CachedProduceRecipe) arecipes.get(recipe);
-        rec.producer.drawLabel();
+        if (rec.producer != null) {
+            rec.producer.drawLabel();
+        }
         for (LabeledPositionedStack stack : rec.products) {
             stack.drawLabel();
         }
@@ -272,6 +295,6 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
     @Override
     public int getRecipeHeight(int recipe) {
         CachedProduceRecipe rec = (CachedProduceRecipe) arecipes.get(recipe);
-        return rec.height;
+        return rec.height + REQUIREMENT_ROW_OFFSET;
     }
 }

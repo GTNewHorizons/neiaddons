@@ -10,6 +10,10 @@ import net.bdew.neiaddons.BaseAddon;
 import net.bdew.neiaddons.NEIAddons;
 import net.bdew.neiaddons.forestry.bees.BeeHelper;
 import net.bdew.neiaddons.forestry.butterflies.ButterflyHelper;
+import net.bdew.neiaddons.forestry.requirements.FlowerRequirementProvider;
+import net.bdew.neiaddons.forestry.requirements.MutationConditionRequirementProvider;
+import net.bdew.neiaddons.forestry.requirements.PollenRequirementProvider;
+import net.bdew.neiaddons.forestry.requirements.RequirementResolvers;
 import net.bdew.neiaddons.forestry.trees.TreeHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.common.MinecraftForge;
@@ -138,9 +142,17 @@ public class AddonForestry extends BaseAddon {
     @Override
     @SideOnly(Side.CLIENT)
     public void loadClient() {
+        setupRequirementProviders();
         BeeHelper.setup();
         TreeHelper.setup();
         ButterflyHelper.setup();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setupRequirementProviders() {
+        RequirementResolvers.register(new MutationConditionRequirementProvider());
+        RequirementResolvers.register(new FlowerRequirementProvider());
+        RequirementResolvers.register(new PollenRequirementProvider());
     }
 
     @SubscribeEvent
