@@ -12,7 +12,6 @@ public class ColorUtils {
         neiChanceTextRed    = color.rgb("neiChanceTextRed",     "0xFFFFFF"),
         neiLabel            = color.rgb("neiLabel",             "0xFFFFFF"),
         neiProd             = color.rgb("neiProd",              "0xFFFFFF"),
-        neiSpec             = color.rgb("neiSpec",              "0xFFF200"),
-        neiRequirement      = color.rgb("neiRequirement",       "0xAAAAAA");
+        neiSpec             = color.rgb("neiSpec",              "0xFFF200");
     // spotless:on
 }
