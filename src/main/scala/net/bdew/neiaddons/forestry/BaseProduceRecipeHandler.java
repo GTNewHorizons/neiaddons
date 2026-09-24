@@ -10,7 +10,6 @@ import java.awt.Rectangle;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -29,7 +28,6 @@ import org.lwjgl.opengl.GL11;
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIClientUtils;
 import codechicken.nei.PositionedStack;
-import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import forestry.api.apiculture.IAlleleBeeSpeciesCustom;
 import forestry.api.apiculture.IJubilanceProvider;
@@ -157,18 +155,6 @@ public abstract class BaseProduceRecipeHandler extends TemplateRecipeHandler {
                 arecipes.add(rec);
             }
         }
-    }
-
-    @Override
-    public List<String> handleItemTooltip(GuiRecipe<?> gui, ItemStack stack, List<String> currenttip, int recipe) {
-        CachedProduceRecipe crecipe = (CachedProduceRecipe) this.arecipes.get(recipe);
-        for (LabeledPositionedStack positionedStack : crecipe.getProducts()) {
-            if (positionedStack.containsWithNBT(stack)) {
-                currenttip.addAll(positionedStack.getTooltip());
-                break;
-            }
-        }
-        return currenttip;
     }
 
     @Override
