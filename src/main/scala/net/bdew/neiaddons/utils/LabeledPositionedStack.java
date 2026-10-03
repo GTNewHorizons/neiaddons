@@ -44,6 +44,7 @@ public class LabeledPositionedStack extends PositionedStack {
         }
     }
 
+    @Override
     public List<String> getTooltip() {
         return tooltip;
     }
