@@ -14,6 +14,9 @@ import java.util.Collections;
 import java.util.List;
 
 import net.bdew.neiaddons.Utils;
+import net.bdew.neiaddons.forestry.requirements.RequirementKind;
+import net.bdew.neiaddons.forestry.requirements.RequirementRenderer;
+import net.bdew.neiaddons.forestry.requirements.RequirementResolvers;
 import net.bdew.neiaddons.utils.ColorUtils;
 import net.bdew.neiaddons.utils.LabeledPositionedStack;
 import net.minecraft.client.resources.I18n;
@@ -24,6 +27,7 @@ import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.guihook.GuiContainerManager;
 import codechicken.nei.recipe.GuiRecipe;
+import codechicken.nei.recipe.HandlerInfo;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
@@ -31,6 +35,8 @@ import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 
 public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
+
+    public static final int REQUIREMENT_ROW_OFFSET = 20;
 
     private final ISpeciesRoot speciesRoot;
 
@@ -44,6 +50,7 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
         public float chance;
         public Collection<String> requirements;
         public Boolean derp = false;
+        private final RequirementRenderer requirementRenderer;
 
         public CachedBreedingRecipe(IMutation mutation) {
             ItemStack stackParent1 = GeneticsUtils
@@ -58,6 +65,11 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
             parrent2 = new LabeledPositionedStack(stackParent2, 75, 19, mutation.getAllele1().getName(), 13);
             result = new LabeledPositionedStack(stackResult, 129, 19, mutation.getTemplate()[0].getName(), 13);
             chance = mutation.getBaseChance();
+
+            requirementRenderer = new RequirementRenderer(
+                    RequirementResolvers.resolve(mutation, mutation.getAllele0(), RequirementKind.MUTATION_RESOURCE),
+                    22 + 78 + 1,
+                    19);
 
             try {
                 requirements = mutation.getSpecialConditions();
@@ -92,6 +104,7 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
             ArrayList<PositionedStack> list = new ArrayList<PositionedStack>();
             list.add(parrent1);
             list.add(parrent2);
+            list.addAll(requirementRenderer.asStacks());
             return list;
         }
     }
@@ -145,28 +158,24 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        if (!speciesRoot.isMember(ingredient)) {
-            return;
+        if (speciesRoot.isMember(ingredient)) {
+            IIndividual individual = speciesRoot.getMember(ingredient);
+            if (individual != null && individual.getGenome() != null && individual.getGenome().getPrimary() != null) {
+                IAlleleSpecies species = individual.getGenome().getPrimary();
+                for (IMutation mutation : speciesRoot.getMutations(false)) {
+                    if ((mutation.getAllele0().equals(species) || mutation.getAllele1().equals(species))
+                            && (!mutation.isSecret() || AddonForestry.showSecret)) {
+                        arecipes.add(new CachedBreedingRecipe(mutation));
+                    }
+                }
+            }
         }
-        IIndividual individual = speciesRoot.getMember(ingredient);
-        if (individual == null) {
-            AddonForestry.instance.logWarning("IIndividual is null searching recipe for %s", ingredient.toString());
-            return;
-        }
-        if (individual.getGenome() == null) {
-            AddonForestry.instance.logWarning("Genome is null when searching recipe for %s", ingredient.toString());
-            return;
-        }
-        if (individual.getGenome().getPrimary() == null) {
-            AddonForestry.instance.logWarning("Species is null when searching recipe for %s", ingredient.toString());
-            return;
-        }
-        IAlleleSpecies species = individual.getGenome().getPrimary();
 
         for (IMutation mutation : speciesRoot.getMutations(false)) {
-            if (mutation.getAllele0().equals(species) || mutation.getAllele1().equals(species)) {
-                if (!mutation.isSecret() || AddonForestry.showSecret) {
-                    arecipes.add(new CachedBreedingRecipe(mutation));
+            if (!mutation.isSecret() || AddonForestry.showSecret) {
+                CachedBreedingRecipe recipe = new CachedBreedingRecipe(mutation);
+                if (recipe.requirementRenderer.contains(ingredient) && !arecipes.contains(recipe)) {
+                    arecipes.add(recipe);
                 }
             }
         }
@@ -174,8 +183,8 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadTransferRects() {
-        transferRects.add(new RecipeTransferRect(new Rectangle(49, 26, 15, 15), getRecipeIdent()));
-        transferRects.add(new RecipeTransferRect(new Rectangle(98, 26, 21, 18), getRecipeIdent()));
+        transferRects.add(new RecipeTransferRect(new Rectangle(49, 19, 15, 15), getRecipeIdent()));
+        transferRects.add(new RecipeTransferRect(new Rectangle(98, 19, 21, 18), getRecipeIdent()));
     }
 
     @Override
@@ -196,13 +205,18 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
             Utils.drawCenteredString(
                     EnumChatFormatting.OBFUSCATED + "DERP",
                     108,
-                    15,
+                    8,
                     ColorUtils.neiChanceTextRed.getColor());
         } else if (!rec.requirements.isEmpty() && AddonForestry.showReqs) {
-            Utils.drawCenteredString("[" + chanceText + "]", 108, 15, ColorUtils.neiChanceTextRed.getColor());
+            Utils.drawCenteredString("[" + chanceText + "]", 108, 8, ColorUtils.neiChanceTextRed.getColor());
         } else {
-            Utils.drawCenteredString(chanceText, 108, 15, ColorUtils.neiChanceTextNormal.getColor());
+            Utils.drawCenteredString(chanceText, 108, 8, ColorUtils.neiChanceTextNormal.getColor());
         }
+    }
+
+    @Override
+    public int getRecipeHeight(int recipe) {
+        return HandlerInfo.DEFAULT_HEIGHT + REQUIREMENT_ROW_OFFSET;
     }
 
     public abstract String getRecipeIdent();
@@ -213,19 +227,23 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
     }
 
     @Override
+    public List<String> handleItemTooltip(GuiRecipe<?> gui, ItemStack stack, List<String> currenttip, int recipe) {
+        return currenttip;
+    }
+
+    @Override
     public List<String> handleTooltip(GuiRecipe<?> gui, List<String> currenttip, int recipe) {
         CachedBreedingRecipe rec = (CachedBreedingRecipe) arecipes.get(recipe);
-        if (AddonForestry.showReqs && !rec.requirements.isEmpty()
-                && GuiContainerManager.shouldShowTooltip(gui)
-                && currenttip.isEmpty()) {
+        if (GuiContainerManager.shouldShowTooltip(gui) && currenttip.isEmpty()) {
             Point offset = gui.getRecipePosition(recipe);
             Point pos = GuiDraw.getMousePosition();
             Point relMouse = new Point(pos.x - gui.guiLeft - offset.x, pos.y - gui.guiTop - offset.y);
-            Rectangle tiprect = new Rectangle(108 - 24, 15 - 2, 48, 12);
-            if (tiprect.contains(relMouse)) {
-                currenttip.addAll(rec.requirements);
-                currenttip.add(I18n.format("bdew.neiaddons.breeding.mutationchance") + ": " + rec.chance + "%");
-                return currenttip;
+            if (AddonForestry.showReqs && !rec.requirements.isEmpty()) {
+                if (new Rectangle(108 - 24, 8 - 2, 48, 12).contains(relMouse)) {
+                    currenttip.addAll(rec.requirements);
+                    currenttip.add(I18n.format("bdew.neiaddons.breeding.mutationchance") + ": " + rec.chance + "%");
+                    return currenttip;
+                }
             }
         }
         return super.handleTooltip(gui, currenttip, recipe);
