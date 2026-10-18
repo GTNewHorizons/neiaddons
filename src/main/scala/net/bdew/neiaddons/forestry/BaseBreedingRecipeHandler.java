@@ -8,6 +8,7 @@ package net.bdew.neiaddons.forestry;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,6 +38,7 @@ import forestry.api.genetics.ISpeciesRoot;
 public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
 
     public static final int REQUIREMENT_ROW_OFFSET = 20;
+    private static final DecimalFormat MUTATION_CHANCE = new DecimalFormat("0.######");
 
     private final ISpeciesRoot speciesRoot;
 
@@ -194,12 +196,7 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
         rec.parrent1.drawLabel();
         rec.parrent2.drawLabel();
 
-        String chanceText;
-        if (rec.chance < 1) {
-            chanceText = "<1%";
-        } else {
-            chanceText = String.format("%.0f%%", rec.chance);
-        }
+        String chanceText = getChanceText(rec);
 
         if (rec.derp) {
             Utils.drawCenteredString(
@@ -221,6 +218,14 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
 
     public abstract String getRecipeIdent();
 
+    protected float getDisplayedChance(float baseChance) {
+        return baseChance;
+    }
+
+    private String getChanceText(CachedBreedingRecipe recipe) {
+        return MUTATION_CHANCE.format(getDisplayedChance(recipe.chance)) + "%";
+    }
+
     @Override
     public String getGuiTexture() {
         return "neiaddons:textures/gui/breeding.png";
@@ -241,7 +246,7 @@ public abstract class BaseBreedingRecipeHandler extends TemplateRecipeHandler {
             if (AddonForestry.showReqs && !rec.requirements.isEmpty()) {
                 if (new Rectangle(108 - 24, 8 - 2, 48, 12).contains(relMouse)) {
                     currenttip.addAll(rec.requirements);
-                    currenttip.add(I18n.format("bdew.neiaddons.breeding.mutationchance") + ": " + rec.chance + "%");
+                    currenttip.add(I18n.format("bdew.neiaddons.breeding.mutationchance") + ": " + getChanceText(rec));
                     return currenttip;
                 }
             }
