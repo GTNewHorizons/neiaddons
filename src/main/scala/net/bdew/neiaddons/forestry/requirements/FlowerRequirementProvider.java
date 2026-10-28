@@ -85,10 +85,7 @@ public class FlowerRequirementProvider implements IBlockRequirementProvider {
         IFlowerProvider provider = ((IAlleleFlowers) allele).getProvider();
         if (provider == null) return null;
 
-        String flowerType = provider.getFlowerType();
-        // The end flower type has no block of its own, any end block counts.
-        if (flowerType == null || flowerType.equals(FlowerManager.FlowerTypeEnd)) return null;
-        return flowerType;
+        return provider.getFlowerType();
     }
 
     private List<ItemStack> resolveFlowers(String flowerType) {
